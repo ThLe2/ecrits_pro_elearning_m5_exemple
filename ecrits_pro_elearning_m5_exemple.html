@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Exemple commenté — Le mail et le courrier professionnels</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root{--prune:#8C1E70;--prune-fonce:#5E1349;--prune-clair:#F4E6EE;--accent:#C77BAA;
+ --vert:#283C28;--gris:#3C3C3C;--gris-moyen:#8A7A85;--filet:#E8DCE5;--creme:#FAF6F8;
+ --ok:#2F7A4F;--ko:#B23B3B;--amb:#B5852A;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--creme);color:var(--gris);
+ font-family:"Nunito","Segoe UI",Helvetica,Arial,sans-serif;font-size:16px;line-height:1.62}
+.wrap{max-width:900px;margin:0 auto;padding:0 18px 60px}
+header.bandeau{background:var(--prune-fonce);color:#fff;padding:18px 0;border-bottom:4px solid var(--accent)}
+header.bandeau .wrap{padding-bottom:0}
+.chapitre{font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:#EAD3E3}
+.chapitre span{color:var(--accent);margin:0 6px}
+h1{font-family:Georgia,"Times New Roman",serif;font-size:27px;line-height:1.25;margin:8px 0 4px;color:#fff}
+.sous{color:#EAD3E3;font-size:14.5px;margin:0}
+h2{font-family:Georgia,"Times New Roman",serif;font-size:20px;color:var(--prune-fonce);
+ margin:34px 0 0;padding-bottom:8px;border-bottom:2px solid var(--filet)}
+h2 .num{color:var(--accent);margin-right:8px}
+h3{font-size:15px;color:var(--vert);margin:20px 0 8px;letter-spacing:.02em}
+.carte{background:#fff;border:1px solid var(--filet);border-radius:10px;padding:20px 22px;margin:18px 0;
+ box-shadow:0 1px 2px rgba(94,19,73,.05)}
+.enc{background:var(--prune-clair);border-left:5px solid var(--prune);padding:14px 18px;
+ border-radius:0 8px 8px 0;margin:18px 0;font-size:15.2px}
+.enc .t{display:block;font-size:11.5px;letter-spacing:.11em;text-transform:uppercase;
+ font-weight:800;color:var(--prune-fonce);margin-bottom:6px}
+.enc.al{background:#FBF4F4;border-left-color:var(--ko)}.enc.al .t{color:var(--ko)}
+.enc.ci{background:#FCF8F0;border-left-color:var(--amb)}.enc.ci .t{color:#8A6418}
+.situ{background:#FCF9FB;border:1px dashed var(--filet);border-radius:8px;padding:16px 18px;margin:16px 0;font-size:15.2px}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.duo>div{background:#fff;border:1px solid var(--filet);border-radius:9px;padding:15px 17px;font-size:14.8px}
+.duo .h{font-weight:800;color:var(--prune-fonce);margin-bottom:7px;font-size:14.5px}
+.tri{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0}
+.tri>div{background:#fff;border:1px solid var(--filet);border-radius:9px;padding:14px 15px;font-size:14.3px}
+.quad{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:16px 0}
+.quad>div{background:#fff;border:1px solid var(--filet);border-radius:9px;padding:12px 13px;font-size:13.6px}
+.quad .h{font-weight:800;color:var(--prune-fonce);margin-bottom:6px;font-size:13px;
+ text-transform:uppercase;letter-spacing:.04em}
+.tri .h{font-weight:800;color:var(--prune-fonce);margin-bottom:6px;font-size:13.5px;
+ text-transform:uppercase;letter-spacing:.05em}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14.8px;background:#fff}
+th,td{border:1px solid var(--filet);padding:9px 12px;text-align:left}
+thead th{background:var(--prune-clair);color:var(--prune-fonce);font-size:13.5px}
+tbody th{font-weight:600;color:var(--gris)}
+td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.tot td,tr.tot th{background:#FBF3F8;font-weight:800;color:var(--prune-fonce)}
+.dl{display:inline-flex;align-items:center;gap:9px;background:var(--prune);color:#fff;text-decoration:none;
+ padding:11px 20px;border-radius:8px;font-weight:700;font-size:15px;margin:20px 0 4px}
+.dl:hover{background:var(--prune-fonce)}
+ol.q{padding-left:0;list-style:none;counter-reset:q}
+ol.q>li{margin:16px 0;padding-left:38px;position:relative}
+ol.q>li::before{counter-increment:q;content:counter(q);position:absolute;left:0;top:1px;
+ width:26px;height:26px;border-radius:50%;background:var(--prune-clair);color:var(--prune-fonce);
+ font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center}
+b,strong{color:var(--vert)}
+footer{text-align:center;font-size:12.5px;color:var(--gris-moyen);padding:26px 18px 12px;
+ border-top:1px solid var(--filet);margin-top:44px}
+@media(max-width:860px){.quad{grid-template-columns:1fr 1fr}}
+@media(max-width:640px){.duo,.tri,.quad{grid-template-columns:1fr}h1{font-size:22px}}
+@media print{body{background:#fff}.dl{display:none}header.bandeau{background:#5E1349 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+
+.mail{background:#fff;border:1px solid var(--filet);border-radius:10px;padding:0;margin:16px 0;overflow:hidden}
+.mail .ent{background:#F7F1F5;border-bottom:1px solid var(--filet);padding:10px 16px;font-size:14px}
+.mail .ent b{color:var(--prune-fonce)}
+.mail .txt{padding:14px 18px;font-size:15.2px}
+.mail p{margin:0 0 10px}
+.cor,.nf{display:none}
+body.vu .err{text-decoration:line-through;background:#FDECEC;border-radius:3px;padding:0 2px;color:var(--gris-moyen)}
+body.vu .cor{display:inline;background:#E9F6EE;border-bottom:2px solid var(--ok);padding:0 2px;border-radius:3px;color:var(--ok);font-weight:700}
+body.vu .nf{display:inline;font-size:11px;vertical-align:super;font-weight:800;color:var(--ko)}
+.btn{display:inline-flex;align-items:center;gap:9px;background:var(--prune);color:#fff;border:0;
+ padding:12px 22px;border-radius:8px;font-family:inherit;font-weight:800;font-size:15px;cursor:pointer}
+.btn:hover{background:var(--prune-fonce)}
+.btn:disabled{background:#B9A9B4;cursor:default}
+.rep{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 16px;margin:12px 0}
+.rep label{display:flex;align-items:center;gap:8px;font-weight:800;color:var(--prune-fonce);font-size:13.5px}
+.rep label span{min-width:58px}
+.rep input{flex:1;min-width:0;padding:9px 11px;border:1px solid #D9C7D3;border-radius:8px;font:inherit;font-size:14.5px;font-weight:400;color:#3C3C3C;background:#fff}
+.rep input:disabled{background:#F7F1F5;color:#5A5A5A}
+.msg{font-weight:700;font-size:14px;color:var(--ko)}
+.fige{display:inline-block;background:#F4E6EE;color:var(--prune-fonce);font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:20px}
+.etape{display:none}
+.etape.on{display:block}
+td.c{text-align:center;white-space:nowrap}
+td.c input{width:20px;height:20px;accent-color:var(--ok)}
+tr.trouve td{background:#F1F9F4}
+.score{background:var(--prune-fonce);color:#fff;border-radius:10px;padding:16px 20px;margin:16px 0;display:flex;align-items:baseline;gap:16px;flex-wrap:wrap}
+.score .gros{font-family:Georgia,serif;font-size:30px;font-weight:700}
+.score .lib{font-size:14.5px;color:#EAD3E3}
+@media(max-width:640px){.rep{grid-template-columns:1fr}.carte table{display:block;overflow-x:auto;max-width:100%}}
+
+#depot .depot-f{display:flex;gap:12px;flex-wrap:wrap;margin:12px 0 4px}
+#depot .depot-f label{display:flex;flex-direction:column;font-size:13px;font-weight:700;color:var(--prune-fonce,#5E1349);flex:1 1 200px}
+#depot .depot-f input{margin-top:4px;padding:10px 12px;border:1px solid #D9C7D3;border-radius:8px;font:inherit;font-size:15px;font-weight:400;color:#3C3C3C;background:#fff}
+#depot .depot-b{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:12px 0 6px}
+#depot .depot-b button{display:inline-flex;align-items:center;gap:8px;background:var(--prune,#8C1E70);color:#fff;border:0;padding:12px 22px;border-radius:8px;font:inherit;font-weight:800;font-size:15px;cursor:pointer}
+#depot .depot-b button:hover{background:var(--prune-fonce,#5E1349)}
+#depot #pdfErr{color:var(--ko,#B23B3B);font-weight:700;font-size:14px}
+#depot #pdfOk{color:var(--ok,#2F7A4F);font-weight:700;font-size:14px}
+#depot .aide{font-size:12.5px;color:var(--gris-moyen,#8A7A85);margin:6px 0 0}
+#depot .aide a{color:var(--prune,#8C1E70)}
+</style></head>
+<body>
+<header class="bandeau"><div class="wrap">
+ <div class="chapitre">Écrits professionnels · @learning <span>/</span> Séquence 5</div><h1>Une réponse mal construite, douze erreurs</h1><p class="sous">Exemple commenté — Le mail et le courrier professionnels · à vous de relire, puis PDF à déposer</p>
+</div></header>
+<div class="wrap">
+
+<h2><span class="num">1 ·</span>Le mail à relire</h2>
+<div class="carte">
+<p>Une réponse à une cliente dont la commande est arrivée incomplète. L'orthographe est juste, et la décision prise est la bonne. Le mail contient pourtant <b>douze erreurs</b> d'objet, de structure, de ton et de relecture, toutes couvertes par la séquence. Lisez-le attentivement : rien n'est signalé. Notez ensuite, dans les douze lignes ci-dessous, chaque erreur que vous repérez.</p>
+<div class="mail">
+ <div class="ent"><b>Objet :</b> <span class="err">Votre demande</span><span class="cor"> Remboursement de l'article manquant — commande n° 6630</span><span class="nf">1</span></div>
+ <div class="txt"><p>Madame,</p><p><span class="err">Nous avons bien reçu votre mail. Notre service traite chaque jour de très nombreuses demandes.</span><span class="cor"> Vous nous avez signalé le 2 avril que votre commande n° 6630 était arrivée incomplète.</span><span class="nf">2</span> <span class="err">Nous sommes vraiment, vraiment désolés et nous vous prions mille fois de nous excuser.</span><span class="cor"> Nous vous prions de nous excuser pour ce désagrément.</span><span class="nf">3</span></p><p><span class="err">Vous avez sans doute mal vérifié le colis à la réception, mais nous</span><span class="cor"> Après vérification, nous</span><span class="nf">4</span> vous confirmons le remboursement de l'article manquant, soit 34,90 €. <span class="err">Il sera sur votre compte demain, sans faute.</span><span class="cor"> Le virement est effectué ce jour ; il apparaît généralement sur le compte sous cinq jours ouvrés.</span><span class="nf">5</span> <span class="err">Votre dossier est au statut LIT-02.</span><span class="cor"> Votre réclamation est enregistrée sous le numéro 88412.</span><span class="nf">6</span></p><p><span class="err">Nous ne pouvons pas vous renvoyer l'article : il est en rupture de stock.</span><span class="cor"> L'article est en rupture de stock et nous ne pouvons pas vous le renvoyer. Si vous le préférez, vous pouvez choisir à la place un article équivalent : il remplacera le remboursement et vous sera expédié sans frais de port.</span><span class="nf">7</span> <span class="err">Par ailleurs, découvrez notre nouvelle collection de printemps !</span><span class="cor"> <i>(phrase supprimée)</i></span><span class="nf">8</span></p><p><span class="err">Tenez-nous au courant.</span><span class="cor"> Si vous choisissez un article équivalent, indiquez-nous sa référence en réponse à ce mail : nous l'expédierons sous 48 heures.</span><span class="nf">9</span></p><p><span class="err">Veuillez agréer, Madame, l'expression de nos sentiments les meilleurs. Cordialement,</span><span class="cor"> Bien cordialement,</span><span class="nf">10</span></p><p><span class="err">Sophie</span><span class="cor"> Sophie Lambert — Conseillère clientèle, Service clients — 03 20 00 00 00</span><span class="nf">11</span></p><p><span class="err">— Message transféré — De : Karim (litiges) : « Encore elle… On rembourse et on clôture. »</span><span class="cor"> <i>(historique interne supprimé)</i></span><span class="nf">12</span></p></div>
+</div>
+</div>
+
+<h2><span class="num">2 ·</span>Vos repérages</h2>
+<div class="carte">
+<div class="enc"><span class="t">CE QUE VOUS FAITES</span>Une ligne par erreur, dans l'ordre où vous les trouvez. Recopiez le passage en cause et dites en quelques mots ce qui ne va pas. Laissez vide une ligne pour laquelle vous n'avez rien trouvé. <b>Une fois vos repérages validés, ils sont figés</b> et la correction s'affiche.</div>
+<div class="rep"><label><span>Erreur 1</span><input id="r1" maxlength="220" placeholder="Le passage en cause, et ce qui ne va pas"></label><label><span>Erreur 2</span><input id="r2" maxlength="220" placeholder="Le passage en cause, et ce qui ne va pas"></label><label><span>Erreur 3</span><input id="r3" maxlength="220" placeholder="Le passage en cause, et ce qui ne va pas"></label><label><span>Erreur 4</span><input id="r4" maxlength="220" placeholder="Le passage en cause, et ce qui ne va pas"></label><label><span>Erreur 5</span><input id="r5" maxlength="220" placeholder="Le passage en cause, et ce qui ne va pas"></label><label><span>Erreur 6</span><input id="r6" maxlength="220" placeholder="Le passage en cause, et ce qui ne va pas"></label><label><span>Erreur 7</span><input id="r7" maxlength="220" placeholder="Le passage en cause, et ce qui ne va pas"></label><label><span>Erreur 8</span><input id="r8" maxlength="220" placeholder="Le passage en cause, et ce qui ne va pas"></label><label><span>Erreur 9</span><input id="r9" maxlength="220" placeholder="Le passage en cause, et ce qui ne va pas"></label><label><span>Erreur 10</span><input id="r10" maxlength="220" placeholder="Le passage en cause, et ce qui ne va pas"></label><label><span>Erreur 11</span><input id="r11" maxlength="220" placeholder="Le passage en cause, et ce qui ne va pas"></label><label><span>Erreur 12</span><input id="r12" maxlength="220" placeholder="Le passage en cause, et ce qui ne va pas"></label></div>
+<div class="barre" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+ <button class="btn" id="valider1">Valider mes repérages et voir la correction</button>
+ <span class="msg" id="msg1"></span><span id="fige1"></span>
+</div>
+</div>
+
+<div class="etape" id="etape2">
+<h2><span class="num">3 ·</span>La correction, erreur par erreur</h2>
+<div class="carte">
+<p>La correction apparaît maintenant dans le mail ci-dessus. Comparez-la à vos lignes et <b>cochez les erreurs que vous aviez repérées</b>. Les cases déjà cochées correspondent aux erreurs retrouvées automatiquement dans vos lignes : vérifiez-les, décochez si besoin, puis validez.</p>
+<table><thead><tr><th>N°</th><th>Dans le mail → la correction</th><th>Règle et raisonnement</th><th>Repérée</th></tr></thead><tbody id="corps"></tbody></table>
+<div class="barre" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+ <button class="btn" id="valider2">Valider mon bilan</button><span id="fige2"></span>
+</div>
+</div>
+</div>
+
+<div class="etape" id="etape3">
+<h2><span class="num">4 ·</span>Votre bilan</h2>
+<div class="score"><span class="gros" id="sc"></span><span class="lib" id="sclib"></span></div>
+<div class="carte"><div class="enc" id="remarque"></div><div class="enc"><span class="t">CE QUE CE MAIL MONTRE</span>La décision est bonne (la cliente est remboursée) et il n'y a aucune faute d'orthographe. Pourtant, l'objet ne dit rien, l'information principale arrive tard, le ton oscille entre reproche et excès d'excuses, et la fin du mail ne dit pas quoi faire.</div><div class="enc al"><span class="t">CE QUE LA CLIENTE RETIENT</span>Un reproche, une promesse qui ne sera pas tenue, et un commentaire interne désobligeant : la réclamation, réglée sur le fond, devient une seconde réclamation sur la forme.</div><div class="enc ci"><span class="t">LA MÉTHODE</span>Avant d'écrire : quel est le message principal, et qu'attend-on du lecteur ? En écrivant : ouverture, cœur, suite à donner, clôture. Avant d'envoyer : destinataires, objet, pièces jointes, faits, historique, ton.</div></div>
+<div id="depot">
+<h2><span class="num">5 ·</span>Votre PDF à déposer</h2>
+<div class="carte">
+<div class="enc ci depot360"><span class="t">À DÉPOSER DANS 360LEARNING</span>Téléchargez votre relecture et sa correction au format PDF, puis <b>déposez-le dans l'activité de dépôt qui suit</b> dans 360Learning. Sans ce dépôt, l'activité n'est pas considérée comme réalisée.</div>
+<div class="depot-f" id="pdfChamps">
+ <label>Nom<input id="pdfNom" autocomplete="family-name"></label>
+ <label>Prénom<input id="pdfPrenom" autocomplete="given-name"></label>
+</div>
+<div class="depot-b"><button type="button" id="pdfBtn">⬇ Télécharger mon PDF</button><span id="pdfErr"></span><span id="pdfOk"></span></div>
+<p class="aide">Si le téléchargement ne démarre pas, <a href="#" id="pdfOuvrir">ouvrez le PDF dans un nouvel onglet</a> puis enregistrez-le.</p>
+</div>
+</div>
+</div>
+
+<footer>TMK Performances - N° Siret : 49841924100027 - Code NAF : 8559A</footer>
+</div>
+<script>
+/* ---------- PDF à déposer dans 360Learning (jsPDF 2.5.1) ----------
+   Module commun à toutes les activités du DA : bandeau prune, identité,
+   score, titres, paragraphes, tableaux, blocs de correction, pied de page
+   TMK et numérotation. Le texte passe par txt() : balises retirées et
+   caractères hors WinAnsi remplacés, sans quoi jsPDF les rend en charabia. */
+const PDFTMK = (function(){
+ const C = {prune:[94,19,73], rose:[199,123,170], pale:[244,230,238], filet:[232,220,229],
+            texte:[60,60,60], gris:[138,122,133], ok:[47,122,79], ko:[178,59,59], moyen:[176,120,20]};
+ const W = new Set('€‚ƒ„…†‡ˆ‰Š‹ŒŽ‘’“”•–—˜™š›œžŸ');
+ const REMPL = {'①':'1)','②':'2)','③':'3)','④':'4)','⑤':'5)','⑥':'6)','→':'->','≤':'<=','≥':'>=',
+   '✓':'','✔':'','✗':'','✘':'','◐':'','↻':'','⬇':'',' ':' ',' ':' ',' ':' ','‑':'-','‐':'-'};
+ function txt(s){
+  if(s===null||s===undefined) return '';
+  const d = document.createElement('div');
+  d.innerHTML = String(s).replace(/<br\s*\/?>/gi,'\n').replace(/<\/(p|li|div)>/gi,'\n');
+  let t = d.textContent;
+  t = [...t].map(c => c in REMPL ? REMPL[c] : c).join('');
+  t = [...t].filter(c => { const k = c.charCodeAt(0); return c==='\n' || (k>=32 && k<256) || W.has(c); }).join('');
+  return t.replace(/[ \t]+\n/g,'\n').replace(/\n{3,}/g,'\n\n').replace(/ {2,}/g,' ').trim();
+ }
+ function dispo(){ return !!(window.jspdf && window.jspdf.jsPDF); }
+
+ function creer(o){
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({unit:'mm', format:'a4'});
+  const PW = doc.internal.pageSize.getWidth(), PH = doc.internal.pageSize.getHeight();
+  const M = 15, LARG = PW - 2*M, BAS = PH - 18;
+  let y = 0;
+  const couleur = (c)=>doc.setTextColor(c[0],c[1],c[2]);
+  const fond = (c)=>doc.setFillColor(c[0],c[1],c[2]);
+  const trait = (c)=>doc.setDrawColor(c[0],c[1],c[2]);
+  const place = (h)=>{ if(y + h > BAS){ doc.addPage(); y = M; return true; } return false; };
+  const lignes = (s, l, taille, style)=>{ doc.setFont('helvetica', style||'normal'); doc.setFontSize(taille); return doc.splitTextToSize(txt(s), l); };
+  const LH = (taille)=>taille*0.42;
+
+  // ---- bandeau
+  const d = o.date || new Date();
+  const dd = d.toLocaleDateString('fr-FR') + ' à ' + d.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+  const tl = lignes(o.titre, LARG, 15, 'bold');
+  const hb = 20 + tl.length*6.3 + (o.sous ? 5 : 0);
+  fond(C.prune); doc.rect(0,0,PW,hb,'F'); fond(C.rose); doc.rect(0,hb,PW,1.4,'F');
+  doc.setFont('helvetica','bold'); doc.setFontSize(8.5); doc.setTextColor(234,211,227);
+  doc.text(txt(o.bandeau).toUpperCase(), M, 10);
+  doc.setFontSize(15); doc.setTextColor(255,255,255); doc.text(tl, M, 18);
+  if(o.sous){ doc.setFont('helvetica','normal'); doc.setFontSize(9.5); doc.setTextColor(234,211,227); doc.text(txt(o.sous), M, 18 + tl.length*6.3); }
+  y = hb + 7;
+
+  // ---- identité
+  fond(C.pale); doc.roundedRect(M, y, LARG, 17, 2, 2, 'F');
+  doc.setFont('helvetica','bold'); doc.setFontSize(8); couleur(C.prune); doc.text('STAGIAIRE', M+4, y+5.5);
+  doc.setFontSize(12); couleur(C.texte); doc.text(txt(o.stagiaire || 'Non renseigné'), M+4, y+12);
+  doc.setFont('helvetica','normal'); doc.setFontSize(8.5); couleur(C.gris);
+  doc.text('Réalisé le ' + dd, PW-M-4, y+12, {align:'right'});
+  y += 23;
+
+  const api = {
+   doc, txt,
+   score(gros, lib, etat){
+    place(22);
+    fond(etat==='ko' ? C.ko : (etat==='moyen' ? C.moyen : (etat==='ok' ? C.ok : C.prune)));
+    doc.roundedRect(M, y, LARG, 18, 2, 2, 'F');
+    doc.setFont('helvetica','bold'); doc.setFontSize(19); doc.setTextColor(255,255,255); doc.text(txt(gros), M+5, y+12);
+    doc.setFont('helvetica','normal'); doc.setFontSize(10);
+    const l = doc.splitTextToSize(txt(lib), LARG-60); doc.text(l, PW-M-5, y+ (l.length>1 ? 8 : 11), {align:'right'});
+    y += 24; return api;
+   },
+   h(titre){
+    place(16);
+    y += 2; doc.setFont('helvetica','bold'); doc.setFontSize(12.5); couleur(C.prune); doc.text(txt(titre), M, y+4);
+    trait(C.filet); doc.setLineWidth(0.5); doc.line(M, y+6.5, PW-M, y+6.5);
+    y += 11; return api;
+   },
+   p(s, opt){
+    opt = opt||{}; const t = opt.taille||10;
+    const l = lignes(s, LARG - (opt.retrait||0), t, opt.style);
+    couleur(opt.couleur||C.texte);
+    for(const x of l){ place(LH(t)+1); doc.text(x, M+(opt.retrait||0), y+LH(t)); y += LH(t)+0.9; }
+    y += opt.apres===undefined ? 2.5 : opt.apres; return api;
+   },
+   encadre(titre, s, etat){
+    const coul = etat==='ko' ? C.ko : (etat==='moyen' ? C.moyen : (etat==='ok' ? C.ok : C.rose));
+    const l = lignes(s, LARG-10, 9.8);
+    const h = 9 + l.length*(LH(9.8)+0.9) + 3;
+    place(Math.min(h, 60));
+    if(y + h > BAS){ // trop long pour une page : on l'écrit en paragraphes
+      api.p(titre, {style:'bold', taille:9, couleur:coul, apres:1}); return api.p(s);
+    }
+    fond([252,249,251]); doc.rect(M, y, LARG, h, 'F'); fond(coul); doc.rect(M, y, 1.6, h, 'F');
+    doc.setFont('helvetica','bold'); doc.setFontSize(8.5); couleur(coul); doc.text(txt(titre).toUpperCase(), M+5, y+5.5);
+    doc.setFont('helvetica','normal'); doc.setFontSize(9.8); couleur(C.texte);
+    doc.text(l, M+5, y+10.5, {lineHeightFactor:1.25});
+    y += h + 4; return api;
+   },
+   /* tableau : head = ['A','B'], rows = [[..],[..]], largeurs en fractions, etats facultatifs par ligne */
+   table(head, rows, fr, etats){
+    const larg = fr.map(f=>f*LARG), pad = 1.8, t = 8.8, lh = LH(t)+0.6;
+    const entete = ()=>{
+      const hl = head.map((h,i)=>lignes(h, larg[i]-2*pad, t, 'bold'));
+      const hh = Math.max(...hl.map(l=>l.length))*lh + 2*pad;
+      fond(C.pale); doc.rect(M, y, LARG, hh, 'F'); couleur(C.prune); doc.setFont('helvetica','bold'); doc.setFontSize(t);
+      let x = M; hl.forEach((l,i)=>{ doc.text(l, x+pad, y+pad+lh-0.8); x += larg[i]; });
+      y += hh;
+    };
+    place(20); entete();
+    rows.forEach((r,k)=>{
+      const cl = r.map((c,i)=>lignes(c, larg[i]-2*pad, t, i===0?'bold':'normal'));
+      const hr = Math.max(...cl.map(l=>l.length))*lh + 2*pad;
+      if(place(hr)) entete();
+      if(k%2===1){ fond([252,249,251]); doc.rect(M, y, LARG, hr, 'F'); }
+      let x = M;
+      cl.forEach((l,i)=>{
+        const e = etats && etats[k] && i===r.length-1 ? etats[k] : null;
+        couleur(e==='ok' ? C.ok : e==='ko' ? C.ko : e==='moyen' ? C.moyen : C.texte);
+        doc.setFont('helvetica', (i===0 || e) ? 'bold' : 'normal'); doc.setFontSize(t);
+        doc.text(l, x+pad, y+pad+lh-0.8); x += larg[i];
+      });
+      trait(C.filet); doc.setLineWidth(0.2); doc.line(M, y+hr, PW-M, y+hr);
+      y += hr;
+    });
+    y += 5; return api;
+   },
+   /* bloc de correction : barre verte ou rouge, titre, lignes de texte */
+   bloc(titre, items, etat){
+    const coul = etat==='ko' ? C.ko : (etat==='ok' ? C.ok : C.rose);
+    const parts = items.filter(x=>x).map(x=>typeof x==='string' ? {s:x} : x);
+    const tl = lignes(titre, LARG-8, 9.6, 'bold');
+    const pl = parts.map(p=>({l:lignes(p.s, LARG-8, 9.2, p.style), p}));
+    const h = 4 + tl.length*(LH(9.6)+0.8) + pl.reduce((s,x)=>s + x.l.length*(LH(9.2)+0.8) + 1.2, 0) + 2;
+    if(h < BAS - M) place(h);
+    const y0 = y, p0 = doc.internal.getCurrentPageInfo().pageNumber;
+    y += 4;
+    couleur(etat==='ko' ? C.ko : C.prune); doc.setFont('helvetica','bold'); doc.setFontSize(9.6);
+    for(const x of tl){ place(5); doc.text(x, M+5, y+LH(9.6)-0.6); y += LH(9.6)+0.8; }
+    pl.forEach(({l,p})=>{
+      doc.setFont('helvetica', p.style||'normal'); doc.setFontSize(9.2); couleur(p.couleur ? C[p.couleur] : C.texte);
+      for(const x of l){ if(place(5)) {} doc.text(x, M+5, y+LH(9.2)-0.6); y += LH(9.2)+0.8; }
+      y += 1.2;
+    });
+    if(doc.internal.getCurrentPageInfo().pageNumber === p0){
+      fond(coul); doc.rect(M, y0+1, 1.5, y-y0, 'F');
+    }
+    y += 4; return api;
+   },
+   espace(h){ y += h; return api; },
+   finir(){
+    const n = doc.internal.getNumberOfPages();
+    for(let i=1;i<=n;i++){
+      doc.setPage(i); doc.setFont('helvetica','normal'); doc.setFontSize(8); couleur(C.gris);
+      doc.text('TMK Performances - N° Siret : 49841924100027 - Code NAF : 8559A', PW/2, PH-8, {align:'center'});
+      doc.text(i + ' / ' + n, PW-M, PH-8, {align:'right'});
+    }
+    return api;
+   },
+   enregistrer(nom){
+    api.finir();
+    try { doc.save(nom); } catch(e) { window.open(doc.output('bloburl'), '_blank'); }
+    return api;
+   },
+   ouvrir(){ api.finir(); window.open(doc.output('bloburl'), '_blank'); return api; }
+  };
+  return api;
+ }
+ function nomFichier(prefixe, stagiaire){
+  const n = (stagiaire||'').normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^A-Za-z0-9]+/g,'_').replace(/^_|_$/g,'');
+  return prefixe + (n ? '_' + n : '') + '_' + new Date().toISOString().slice(0,10) + '.pdf';
+ }
+ /* Branche le bloc « PDF à déposer » de la page : champs nom/prénom, bouton, secours.
+    o.identite() renvoie le nom déjà connu (QCM avec écran d'identité) ou null ;
+    o.construire(stagiaire) renvoie l'objet PDF prêt ; o.prefixe nomme le fichier. */
+ function lms(){ const p = new URLSearchParams(location.search); return p.get('lms')==='1' || p.get('contexte')==='lms'; }
+ function brancher(o){
+  const racine = document.getElementById('depot'); if(!racine) return;
+  if(lms()) racine.querySelectorAll('.depot360').forEach(e=>e.style.display='none');
+  const connu = o.identite ? o.identite() : null;
+  const champs = document.getElementById('pdfChamps');
+  if(connu && champs) champs.style.display='none';
+  const err = document.getElementById('pdfErr');
+  const qui = ()=>{
+    if(connu) return connu;
+    const n = document.getElementById('pdfNom').value.trim(), p = document.getElementById('pdfPrenom').value.trim();
+    if(n.length<2 || p.length<2){ if(lms() && !n && !p) return ''; err.textContent = 'Indiquez votre nom et votre prénom : ils figurent sur le PDF que vous déposez.'; return null; }
+    return p + ' ' + n.toUpperCase();
+  };
+  const faire = (ouvrir)=>{
+    err.textContent = '';
+    if(!dispo()){ err.textContent = "Le module PDF n'a pas pu se charger. Vérifiez votre connexion, puis rechargez la page."; return; }
+    const s = qui(); if(s===null) return;
+    const pdf = o.construire(s);
+    if(ouvrir) pdf.ouvrir(); else pdf.enregistrer(nomFichier(o.prefixe, s));
+    document.getElementById('pdfOk').textContent = 'PDF généré. ' + (lms() ? '' : 'Déposez-le maintenant dans 360Learning.');
+  };
+  document.getElementById('pdfBtn').addEventListener('click', ()=>faire(false));
+  document.getElementById('pdfOuvrir').addEventListener('click', e=>{ e.preventDefault(); faire(true); });
+ }
+ return {creer, txt, dispo, nomFichier, brancher, lms};
+})();
+
+const F = [
+ {
+  "n": 1,
+  "faux": "Votre demande",
+  "juste": "Remboursement de l'article manquant — commande n° 6630",
+  "fauxT": "Votre demande",
+  "justeT": "Remboursement de l'article manquant — commande n° 6630",
+  "regle": "objet",
+  "pourquoi": "« Votre demande » ne dit rien. L'objet donne le sujet et un élément qui l'identifie : le remboursement, le numéro de commande."
+ },
+ {
+  "n": 2,
+  "faux": "Nous avons bien reçu votre mail. Notre service traite chaque jour de très nombreuses demandes.",
+  "juste": "Vous nous avez signalé le 2 avril que votre commande n° 6630 était arrivée incomplète.",
+  "fauxT": "Nous avons bien reçu votre mail. Notre service traite chaque jour de très nombreuses demandes.",
+  "justeT": "Vous nous avez signalé le 2 avril que votre commande n° 6630 était arrivée incomplète.",
+  "regle": "ouverture",
+  "pourquoi": "La première phrase parle du service, pas de la cliente. L'ouverture rappelle le contexte : sa demande, la date, la référence."
+ },
+ {
+  "n": 3,
+  "faux": "Nous sommes vraiment, vraiment désolés et nous vous prions mille fois de nous excuser.",
+  "juste": "Nous vous prions de nous excuser pour ce désagrément.",
+  "fauxT": "Nous sommes vraiment, vraiment désolés et nous vous prions mille fois de nous excuser.",
+  "justeT": "Nous vous prions de nous excuser pour ce désagrément.",
+  "regle": "ton",
+  "pourquoi": "Trop d'excuses affaiblissent le message. Une phrase d'excuse sobre suffit."
+ },
+ {
+  "n": 4,
+  "faux": "Vous avez sans doute mal vérifié le colis à la réception, mais nous",
+  "juste": "Après vérification, nous",
+  "fauxT": "Vous avez sans doute mal vérifié le colis à la réception, mais nous",
+  "justeT": "Après vérification, nous",
+  "regle": "ton",
+  "pourquoi": "Le reproche (« vous avez sans doute mal vérifié ») braque la cliente, alors même qu'on lui donne raison."
+ },
+ {
+  "n": 5,
+  "faux": "Il sera sur votre compte demain, sans faute.",
+  "juste": "Le virement est effectué ce jour ; il apparaît généralement sur le compte sous cinq jours ouvrés.",
+  "fauxT": "Il sera sur votre compte demain, sans faute.",
+  "justeT": "Le virement est effectué ce jour ; il apparaît généralement sur le compte sous cinq jours ouvrés.",
+  "regle": "promesse",
+  "pourquoi": "Le délai bancaire ne dépend pas du service : on dit ce que l'on fait (le virement) et l'on donne le délai habituel, sans s'engager sur une date."
+ },
+ {
+  "n": 6,
+  "faux": "Votre dossier est au statut LIT-02.",
+  "juste": "Votre réclamation est enregistrée sous le numéro 88412.",
+  "fauxT": "Votre dossier est au statut LIT-02.",
+  "justeT": "Votre réclamation est enregistrée sous le numéro 88412.",
+  "regle": "jargon",
+  "pourquoi": "« LIT-02 » est un code interne. Le client a besoin d'une référence qu'il pourra citer : le numéro de sa réclamation."
+ },
+ {
+  "n": 7,
+  "faux": "Nous ne pouvons pas vous renvoyer l'article : il est en rupture de stock.",
+  "juste": "L'article est en rupture de stock et nous ne pouvons pas vous le renvoyer. Si vous le préférez, vous pouvez choisir à la place un article équivalent : il remplacera le remboursement et vous sera expédié sans frais de port.",
+  "fauxT": "Nous ne pouvons pas vous renvoyer l'article : il est en rupture de stock.",
+  "justeT": "L'article est en rupture de stock et nous ne pouvons pas vous le renvoyer. Si vous le préférez, vous pouvez choisir à la place un article équivalent : il remplacera le remboursement et vous sera expédié sans frais de port.",
+  "regle": "mauvaise nouvelle",
+  "pourquoi": "Un refus sec, sans alternative. On dit la décision et sa raison, puis on propose une solution quand elle existe."
+ },
+ {
+  "n": 8,
+  "faux": "Par ailleurs, découvrez notre nouvelle collection de printemps !",
+  "juste": "<i>(phrase supprimée)</i>",
+  "fauxT": "Par ailleurs, découvrez notre nouvelle collection de printemps !",
+  "justeT": "(phrase supprimée)",
+  "regle": "structure",
+  "pourquoi": "Une phrase publicitaire n'a pas sa place dans une réponse à une réclamation : elle sort du mail."
+ },
+ {
+  "n": 9,
+  "faux": "Tenez-nous au courant.",
+  "juste": "Si vous choisissez un article équivalent, indiquez-nous sa référence en réponse à ce mail : nous l'expédierons sous 48 heures.",
+  "fauxT": "Tenez-nous au courant.",
+  "justeT": "Si vous choisissez un article équivalent, indiquez-nous sa référence en réponse à ce mail : nous l'expédierons sous 48 heures.",
+  "regle": "suite à donner",
+  "pourquoi": "« Tenez-nous au courant » ne dit pas quoi faire. La suite à donner précise l'action attendue et le délai."
+ },
+ {
+  "n": 10,
+  "faux": "Veuillez agréer, Madame, l'expression de nos sentiments les meilleurs. Cordialement,",
+  "juste": "Bien cordialement,",
+  "fauxT": "Veuillez agréer, Madame, l'expression de nos sentiments les meilleurs. Cordialement,",
+  "justeT": "Bien cordialement,",
+  "regle": "formule finale",
+  "pourquoi": "Deux formules finales se suivent, l'une de lettre, l'autre de mail : on n'en garde qu'une. Dans un mail, <b>Bien cordialement</b> suffit."
+ },
+ {
+  "n": 11,
+  "faux": "Sophie",
+  "juste": "Sophie Lambert — Conseillère clientèle, Service clients — 03 20 00 00 00",
+  "fauxT": "Sophie",
+  "justeT": "Sophie Lambert — Conseillère clientèle, Service clients — 03 20 00 00 00",
+  "regle": "signature",
+  "pourquoi": "Un prénom seul ne permet pas de recontacter la bonne personne : prénom, nom, fonction, service et coordonnées."
+ },
+ {
+  "n": 12,
+  "faux": "— Message transféré — De : Karim (litiges) : « Encore elle… On rembourse et on clôture. »",
+  "juste": "<i>(historique interne supprimé)</i>",
+  "fauxT": "— Message transféré — De : Karim (litiges) : « Encore elle… On rembourse et on clôture. »",
+  "justeT": "(historique interne supprimé)",
+  "regle": "relecture",
+  "pourquoi": "Un échange interne transféré au client par erreur. Avant d'envoyer, on supprime l'historique interne."
+ }
+];
+const LECONS = [{"t": "CE QUE CE MAIL MONTRE", "x": "La décision est bonne (la cliente est remboursée) et il n'y a aucune faute d'orthographe. Pourtant, l'objet ne dit rien, l'information principale arrive tard, le ton oscille entre reproche et excès d'excuses, et la fin du mail ne dit pas quoi faire."}, {"t": "CE QUE LA CLIENTE RETIENT", "x": "Un reproche, une promesse qui ne sera pas tenue, et un commentaire interne désobligeant : la réclamation, réglée sur le fond, devient une seconde réclamation sur la forme."}, {"t": "LA MÉTHODE", "x": "Avant d'écrire : quel est le message principal, et qu'attend-on du lecteur ? En écrivant : ouverture, cœur, suite à donner, clôture. Avant d'envoyer : destinataires, objet, pièces jointes, faits, historique, ton."}];
+const MOT = "erreur", MOTS = "erreurs";
+const BANDEAU = "Écrits professionnels · @learning / Séquence 5";
+const TITRE = "Exemple commenté — Une réponse mal construite, douze erreurs";
+const lignes = () => F.map((f,k)=>document.getElementById('r'+(k+1)).value.trim());
+let notes = [], coche = [], score = 0;
+
+/* Suggestion de rapprochement entre les lignes du stagiaire et les erreurs : indicative, le stagiaire corrige. */
+const norm = s => s.replace(/[’‘`]/g,"'").replace(/[«»"“”]/g,' ').replace(/[,.;:!?()]/g,' ').replace(/\s+/g,' ').trim();
+function contient(l, forme, casse){
+  const esc = forme.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+  return new RegExp('(^|[^\\p{L}])' + esc + '(?=$|[^\\p{L}])', casse ? 'u' : 'iu').test(l);
+}
+function suggerer(L){
+  const pris = L.map(()=>false);
+  return F.map(f=>{
+    const w = norm(f.fauxT), j = norm(f.justeT);
+    if((w.match(/\p{L}/gu)||[]).length < 1) return false;
+    const casse = w.toLowerCase() === j.toLowerCase();
+    const mots = w.split(' ');
+    for(let i=0;i<L.length;i++){
+      if(pris[i] || !L[i]) continue;
+      const l = norm(L[i]); let ok = false;
+      if(mots.length > 4){ for(let k=0;k+3<=mots.length && !ok;k++) ok = contient(l, mots.slice(k,k+3).join(' '), false); }
+      else ok = contient(l, w, casse) && (w.length >= 5 || contient(l, j, casse));
+      if(ok){ pris[i] = true; return true; }
+    }
+    return false;
+  });
+}
+
+document.getElementById('valider1').addEventListener('click', ()=>{
+  notes = lignes();
+  if(notes.every(x=>!x)){ document.getElementById('msg1').textContent = 'Notez au moins une ' + MOT + ' avant de valider.'; return; }
+  F.forEach((f,k)=>document.getElementById('r'+(k+1)).disabled = true);
+  const b = document.getElementById('valider1'); b.disabled = true; b.textContent = 'Repérages validés';
+  document.getElementById('msg1').textContent = '';
+  document.getElementById('fige1').innerHTML = '<span class="fige">Repérages figés</span>';
+  document.body.classList.add('vu');
+  const sug = suggerer(notes);
+  document.getElementById('corps').innerHTML = F.map((f,k)=>`<tr id="t${k}"${sug[k]?' class="trouve"':''}>
+    <td><b>${f.n}</b></td><td>${f.faux} → <b>${f.juste}</b></td><td><b>${f.regle}</b> — ${f.pourquoi}</td>
+    <td class="c"><input type="checkbox" id="c${k}"${sug[k]?' checked':''} aria-label="${MOT} ${f.n} repérée"></td></tr>`).join('');
+  F.forEach((f,k)=>document.getElementById('c'+k).addEventListener('change', e=>document.getElementById('t'+k).classList.toggle('trouve', e.target.checked)));
+  document.getElementById('etape2').classList.add('on');
+  document.querySelector('.mail').scrollIntoView({behavior:'smooth', block:'start'});
+});
+
+function remarque(s){
+  if(s >= 10) return "Relecture efficace : vous voyez ce que le destinataire verrait. Gardez la méthode de la fiche mémo pour chaque envoi.";
+  if(s >= 7) return "Bonne relecture, mais quelques " + MOTS + " passent encore. Repérez dans le tableau celles que vous avez manquées : elles indiquent les règles de la fiche mémo à revoir en priorité.";
+  if(s >= 4) return "Une partie seulement des " + MOTS + " a été repérée. Relisez la fiche mémo, en particulier les règles des " + MOTS + " manquées, avant de faire l'exercice d'entraînement.";
+  return "Peu de " + MOTS + " repérées : c'est normal en début de séquence. Revoyez la capsule et la fiche mémo, puis relisez ce mail avec la correction sous les yeux avant de passer à l'exercice.";
+}
+
+document.getElementById('valider2').addEventListener('click', ()=>{
+  coche = F.map((f,k)=>document.getElementById('c'+k).checked);
+  F.forEach((f,k)=>document.getElementById('c'+k).disabled = true);
+  score = coche.filter(x=>x).length;
+  const b = document.getElementById('valider2'); b.disabled = true; b.textContent = 'Bilan validé';
+  document.getElementById('fige2').innerHTML = '<span class="fige">Bilan figé</span>';
+  document.getElementById('sc').textContent = score + ' / 12';
+  document.getElementById('sclib').textContent = MOTS + ' repérées sur douze';
+  document.getElementById('remarque').innerHTML = '<span class="t">CE QUE VOUS EN FAITES</span>' + remarque(score);
+  document.getElementById('etape3').classList.add('on');
+  document.getElementById('etape3').scrollIntoView({behavior:'smooth', block:'start'});
+});
+
+PDFTMK.brancher({prefixe:'Exemple_commente_S5', construire:(stag)=>{
+  const P = PDFTMK.creer({bandeau:BANDEAU, titre:TITRE, sous:'Relecture du mail, repérage des ' + MOTS + ' et correction', stagiaire:stag});
+  P.score(score + ' / 12', MOTS + ' repérées sur douze', score>=10?'ok':score>=7?'moyen':'ko');
+  P.encadre('Ce que vous en faites', remarque(score));
+  P.h('Vos repérages, tels que vous les avez notés');
+  P.table(['Ligne','Ce que vous avez noté'], notes.map((x,k)=>[String(k+1), x || '(ligne vide)']), [.12,.88]);
+  P.h('La correction');
+  P.table(['N°','Dans le mail -> la correction','Règle et raisonnement','Repérée'],
+    F.map((f,k)=>[String(f.n), f.fauxT + ' -> ' + f.justeT, f.regle + ' — ' + f.pourquoi, coche[k]?'Oui':'Non']),
+    [.07,.33,.46,.14], coche.map(c=>c?'ok':'ko'));
+  P.h('Ce qu\'il faut en retenir');
+  LECONS.forEach(l=>P.encadre(l.t, l.x));
+  return P;
+}});
+</script>
+</body></html>
